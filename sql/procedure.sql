@@ -1,0 +1,16 @@
+create or replace PROCEDURE bitcoin_campaign (btc IN NUMBER, r OUT VARCHAR2)
+IS
+  CURSOR c1 IS SELECT ACCOUNT_ID, BALANCE FROM BALANCE WHERE CURRENCY_ID = '1';
+BEGIN
+  DBMS_OUTPUT.PUT_LINE('..start..');
+  FOR rec IN c1 LOOP
+    UPDATE BALANCE SET BALANCE = rec.BALANCE + btc, UPDATED_DATE = sysdate WHERE ACCOUNT_ID = rec.ACCOUNT_ID and CURRENCY_ID = '1';
+  END LOOP;
+  DBMS_OUTPUT.PUT_LINE('..end..');
+  r := 'OK';
+EXCEPTION
+  WHEN others THEN
+    DBMS_OUTPUT.PUT_LINE('..error..');
+	r := 'NG';
+END
+;
